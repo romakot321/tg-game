@@ -6,7 +6,7 @@ var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(0, 0, "black");
-var timeleft = 1;
+var timeleft = 60;
 
 var objs = [];
 

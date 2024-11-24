@@ -26,6 +26,7 @@ markup = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text='Start', web_app=WebAppInfo(url='https://eramir.ru/game'))
+            InlineKeyboardButton(text='Leaders', web_app=WebAppInfo(url='https://eramir.ru/game/leaderboard.html'))
         ]
     ]
 )
@@ -33,7 +34,7 @@ markup = InlineKeyboardMarkup(
 
 async def on_startup(bot: Bot):
     await bot.set_chat_menu_button(
-        menu_button=MenuButtonWebApp(text="Open Menu", web_app=WebAppInfo(url=f"https://eramir.ru/game"))
+        menu_button=MenuButtonWebApp(text="Run", web_app=WebAppInfo(url=f"https://eramir.ru/game"))
     )
 
 
@@ -46,7 +47,7 @@ async def init_bot():
         logger.info(f"User telegram_id={message.from_user.id} start")
         await new_user(message.from_user.id)
         await message.answer(
-            "Нажми на кнопку чтобы начать игру",
+            "Меню",
             reply_markup=markup
         )
 
