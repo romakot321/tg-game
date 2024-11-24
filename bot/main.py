@@ -1,7 +1,7 @@
-import logging
 import sys
-from os import getenv
 import asyncio
+from os import getenv
+from loguru import logger
 
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
@@ -15,9 +15,11 @@ from aiogram.types import Message
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
+from db import init_db, new_user, close_db
+
 TOKEN = getenv("BOT_TOKEN")
 
-ikb_donate = InlineKeyboardMarkup(
+markup = InlineKeyboardMarkup(
     row_width=1,
     inline_keyboard=[
         [
@@ -31,6 +33,7 @@ async def on_startup(bot: Bot):
     await bot.set_chat_menu_button(
         menu_button=MenuButtonWebApp(text="Open Menu", web_app=WebAppInfo(url=f"https://eramir.ru/game"))
     )
+    await init_db()
 
 
 async def main():
@@ -39,16 +42,19 @@ async def main():
 
     @dispatcher.message(CommandStart())
     async def cmd_start_help(message: Message):
+        logger.info(f"User telegram_id={message.from_user.id} start")
+        await new_user(message.from_user.id)
         await message.answer(
-            "Это сообщение со справкой",
-            reply_markup=ikb_donate
+            "Нажми на кнопку чтобы начать игру",
+            reply_markup=markup
         )
 
     dispatcher.startup.register(on_startup)
     
     await bot.delete_webhook()
-    print("Bot started")
+    logger.info("Bot started")
     await dispatcher.start_polling(bot)
+    await close_db()
 
 
 if __name__ == "__main__":
