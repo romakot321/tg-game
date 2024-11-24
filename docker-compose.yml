@@ -6,3 +6,10 @@ services:
     container_name: tg-game_front
     ports:
       - "127.0.0.1:8085:80"
+
+  bot:
+    build: ./bot
+    restart: always
+    container_name: tg-game_bot
+    env_file:
+      - .env
