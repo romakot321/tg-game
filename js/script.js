@@ -4,6 +4,40 @@ var ctx = canvas.getContext('2d');
 var playerX = 30;
 var playerY = 30;
 
+canvas.addEventListener('touchstart', function (event) {
+    touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
+}, false);
+
+canvas.addEventListener('touchend', function (event) {
+    touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
+    handleGesture();
+}, false);
+
+
+function handleGesture() {
+    if (touchendX < touchstartX) {
+      move('l');
+    }
+
+    if (touchendX > touchstartX) {
+      move('r');
+    }
+
+    if (touchendY < touchstartY) {
+      move('u');
+    }
+
+    if (touchendY > touchstartY) {
+      move('d');
+    }
+
+    if (touchendY === touchstartY) {
+      console.log('Tap');
+    }
+}
+
 
 function resizeCtxCanvas(ctx) {
   const { width, height } = ctx.canvas.getBoundingClientRect();
