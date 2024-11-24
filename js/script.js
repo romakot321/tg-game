@@ -1,8 +1,8 @@
 //Define globals
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var playerX = 30;
-var playerY = 30;
+var playerX = 50;
+var playerY = 50;
 
 canvas.addEventListener('touchstart', function (event) {
     touchstartX = event.changedTouches[0].screenX;
@@ -17,19 +17,16 @@ canvas.addEventListener('touchend', function (event) {
 
 
 function handleGesture() {
-    if (touchendX < touchstartX) {
+    if (touchendX < touchstartX && Math.abs(touchstartY - touchendY) < 40) {
       move('l');
     }
-
-    if (touchendX > touchstartX) {
+    else if (touchendX > touchstartX && Math.abs(touchstartY - touchendY) < 40) {
       move('r');
     }
-
-    if (touchendY < touchstartY) {
+    else if (touchendY < touchstartY) {
       move('u');
     }
-
-    if (touchendY > touchstartY) {
+    else if (touchendY > touchstartY) {
       move('d');
     }
 
@@ -47,25 +44,29 @@ function resizeCtxCanvas(ctx) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
+const app = window.Telegram.WebApp;
+app.ready()
+app.disableVerticalSwipes();
+
 resizeCtxCanvas(ctx);
 draw();
 
 function move(direction) {
   switch (direction) {
     case 'r':
-      playerX += 10;
+      playerX += 50;
       break;
 
     case 'l':
-      playerX -= 10;
+      playerX -= 50;
       break;
 
     case 'u':
-      playerY -= 10;
+      playerY -= 50;
       break;
 
     case 'd':
-      playerY += 10;
+      playerY += 50;
       break;
   
     default:
