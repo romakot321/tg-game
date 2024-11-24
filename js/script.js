@@ -6,7 +6,7 @@ var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(50, 50, "black");
-var timeleft = 59;
+var timeleft = 60;
 
 var objs = [];
 
@@ -91,14 +91,17 @@ function move(direction) {
 }
 
 function timer(){
-    var timer = setInterval(function(){
-        timerElement.innerHTML='Time left: 0'+Math.floor(timeleft/60)+":"+timeleft%60;
-        timeleft--;
-        if (timeleft < 0) {
-	    timerElement.innerHTML = "Game end";
-            clearInterval(timer);
-        }
-    }, 1000);
+  var timer = setInterval(function(){
+    var seconds = timeleft % 60;
+    var minutes = Math.floor(timeleft/60);
+    if (seconds < 10) { seconds = "0" + seconds; }
+    timerElement.innerHTML = 'Time left: ' + minutes + ":" + seconds;
+    timeleft--;
+    if (timeleft < 0) {
+      timerElement.innerHTML = "Game end";
+      clearInterval(timer);
+    }
+  }, 1000);
 }
 
 function getRandomInt(min, max) {
