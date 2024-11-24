@@ -20,4 +20,4 @@ RUN pip3 install ./wheels/*.whl --no-warn-script-location
 
 COPY ./ ./
 
-CMD /home/python/.local/bin/uvicorn main:fastapi_app --port 8000
+CMD /home/python/.local/bin/uvicorn main:fastapi_app --port 8000 --host 0.0.0.0
