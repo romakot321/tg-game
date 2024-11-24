@@ -33,9 +33,15 @@ body {
   padding: 10px;
 
   display: grid;
-  grid-template-rows: repeat(30px, 4);
+  grid-template-rows: repeat(30px, 3);
   align-items: center;
   justify-items: center;
+}
+
+#score {
+  font-family: sans-serif;
+  grid-row: 1;
+  justify-self: center;
 }
 
 #up, #right, #left, #down {
@@ -48,10 +54,10 @@ body {
   min-width: 60px;
   max-width: 10vw;
 }
-#up { grid-row: 1; }
-#right { grid-row: 1; }
-#left { grid-row: 2; }
-#down { grid-row: 2; }
+#up { grid-row: 2; }
+#right { grid-row: 2; }
+#left { grid-row: 3; }
+#down { grid-row: 3; }
 
 #control > button:hover {
   border: darkblue 1.5px solid;
@@ -61,7 +67,7 @@ body {
 @media(max-width: 768px) {
   #main {
     grid-template-columns: 100%;
-    grid-template-rows: calc(100% - 50px) 150px;
+    grid-template-rows: calc(100% - 180px) 150px;
   }
 }
 
