@@ -32,20 +32,20 @@ async def new_user(telegram_id: int):
             pass
 
 
-async def get_user(telegram_id: int) -> dict:
+async def get_user(telegram_id: int) -> dict | None:
     async with connection_pool.acquire() as connection:
         result = await connection.fetchrow("""
             SELECT * FROM users WHERE telegram_id=$1
         """, telegram_id)
-    return dict(result)
+    return dict(result) if result else None
 
 
-async def update_user_score(telegram_id: int, score: int):
+async def add_user_score(telegram_id: int, score: int):
     if connection_pool is None:
         raise ValueError("Connect to db first")
     async with connection_pool.acquire() as connection:
         await connection.execute("""
-            UPDATE users SET score=$1 WHERE telegram_id=$2
+            UPDATE users SET score=score + $1 WHERE telegram_id=$2
         """, score, telegram_id)
 
 
@@ -81,6 +81,3 @@ async def init_db():
 
 async def close_db():
     await connection_pool.close()
-
-
-asyncio.run(init_db())

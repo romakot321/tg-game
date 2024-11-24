@@ -5,7 +5,7 @@ var scoreElement = document.getElementById('score');
 var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
-var playerObject = new Object(50, 50, "black");
+var playerObject = new Object(0, 0, "black");
 var timeleft = 60;
 
 var objs = [];
@@ -76,8 +76,9 @@ function handleGesture() {
 function resizeCtxCanvas(ctx) {
   const { width, height } = ctx.canvas.getBoundingClientRect();
   console.log(width, height);
-  ctx.canvas.width = width;
-  ctx.canvas.height = height;
+  ctx.canvas.width = width - width % Object.step;
+  ctx.canvas.height = height - height % Object.step;
+  console.log(ctx.canvas.width, ctx.canvas.height);
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
@@ -87,6 +88,31 @@ function addToScore(val) {
 }
 
 function move(direction) {
+  switch (direction) {
+    case 'r':
+      if (playerObject.right + Object.step >= canvas.width) {
+        return;
+      }
+      break;
+    case 'l':
+      if (playerObject.left - Object.step <= 0) {
+        return;
+      }
+      break;
+    case 'd':
+      if (playerObject.bottom + Object.step >= canvas.height) {
+        return;
+      }
+      break;
+    case 'u':
+      if (playerObject.top - Object.step <= 0) {
+        return;
+      }
+      break;
+  
+    default:
+      break;
+  }
   playerObject.move(direction);
 }
 
@@ -114,7 +140,9 @@ function generate() {
   var obj = new Object(
     getRandomInt(0, ctx.canvas.width - 100),
     getRandomInt(0, ctx.canvas.height - 100),
-    "red"
+    "red",
+    55,
+    55
   );
   objs.push(obj);
 }

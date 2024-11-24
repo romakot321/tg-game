@@ -2,9 +2,9 @@ import sys
 import asyncio
 from os import getenv
 from loguru import logger
+from contextlib import asynccontextmanager
 
-from aiohttp.web import run_app
-from aiohttp.web_app import Application
+from fastapi import FastAPI
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -16,6 +16,7 @@ from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
 from db import init_db, new_user, close_db
+from router import router
 
 TOKEN = getenv("BOT_TOKEN")
 
@@ -36,7 +37,11 @@ async def on_startup(bot: Bot):
     await init_db()
 
 
-async def main():
+async def on_shutdown(bot: Bot):
+    await close_db()
+
+
+async def init_bot():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dispatcher = Dispatcher()
 
@@ -50,12 +55,23 @@ async def main():
         )
 
     dispatcher.startup.register(on_startup)
+    dispatcher.shutdown.register(on_shutdown)
     
     await bot.delete_webhook()
     logger.info("Bot started")
-    await dispatcher.start_polling(bot)
-    await close_db()
+    asyncio.create_task(dispatcher.start_polling(bot))
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+@asynccontextmanager
+async def lifespan(app):
+    await init_bot()
+    yield
+
+
+def main():
+    app = FastAPI(lifespan=lifespan)
+    app.include_router(router)
+    return app
+    
+
+fastapi_app = main()

@@ -12,29 +12,29 @@ class Rect {
   get bottom() { return this.y + this.height; }
 
   iscollide(rect2) {
-    return this.right > rect2.left && this.right < rect2.right && (
-      this.top > rect2.top && this.top < rect2.bottom ||
-      this.bottom < rect2.bottom && this.bottom > rect2.top
-    ) || this.left < rect2.right && this.left > rect2.left && (
-      this.top > rect2.top && this.top < rect2.bottom ||
-      this.bottom < rect2.bottom && this.bottom > rect2.top
-    ) || this.bottom > rect2.top && this.bottom < rect2.bottom && (
-      this.left > rect2.left && this.left < rect2.right ||
-      this.right < rect2.right && this.right > rect2.left
-    ) || this.top < rect2.bottom && this.top > rect2.top && (
-      this.left > rect2.left && this.left < rect2.right ||
-      this.right < rect2.right && this.right > rect2.left
+    return this.right >= rect2.left && this.right <= rect2.right && (
+      this.top >= rect2.top && this.top <= rect2.bottom ||
+      this.bottom <= rect2.bottom && this.bottom >= rect2.top
+    ) || this.left <= rect2.right && this.left >= rect2.left && (
+      this.top >= rect2.top && this.top <= rect2.bottom ||
+      this.bottom <= rect2.bottom && this.bottom >= rect2.top
+    ) || this.bottom >= rect2.top && this.bottom <= rect2.bottom && (
+      this.left >= rect2.left && this.left <= rect2.right ||
+      this.right <= rect2.right && this.right >= rect2.left
+    ) || this.top <= rect2.bottom && this.top >= rect2.top && (
+      this.left >= rect2.left && this.left <= rect2.right ||
+      this.right <= rect2.right && this.right >= rect2.left
     )
   }
 }
 
 
 class Object extends Rect {
-  step = 50;
-  speed = 1;
+  static step = 50;
+  static speed = 1;
 
-  constructor(x, y, color) {
-    super(x, y, 50, 50);
+  constructor(x, y, color, width, height) {
+    super(x, y, width ?? Object.step, height ?? Object.step);
     this.color = color;
     this.velocityX = 0;
     this.velocityY = 0;
@@ -61,14 +61,14 @@ class Object extends Rect {
     if (!this.isMoving || this.isPopping) { return; }
 
     if (this.velocityX > 0) {
-      this.velocityX -= this.speed;
+      this.velocityX -= Object.speed;
     } else if (this.velocityX < 0) {
-      this.velocityX += this.speed;
+      this.velocityX += Object.speed;
     }
     if (this.velocityY > 0) {
-      this.velocityY -= this.speed;
+      this.velocityY -= Object.speed;
     } else if (this.velocityY < 0) {
-      this.velocityY += this.speed;
+      this.velocityY += Object.speed;
     }
     if (this.velocityX == 0 && this.velocityY == 0) {
       this.isMoving = false;
@@ -84,10 +84,10 @@ class Object extends Rect {
     this.y -= this.velocityY * 1.5;
 
     if (this.velocityX > 0) {
-      this.velocityX -= this.speed * 0.75;
+      this.velocityX -= Object.speed * 0.75;
     }
     if (this.velocityY > 0) {
-      this.velocityY -= this.speed * 0.75;
+      this.velocityY -= Object.speed * 0.75;
     }
     if (this.velocityX <= 0 && this.velocityY <= 0) {
       this.canBeRemoved = true;
@@ -116,19 +116,19 @@ class Object extends Rect {
 
     switch (direction) {
       case 'r':
-        this.velocityX = Math.sqrt(this.step * 2);
+        this.velocityX = Math.sqrt(Object.step * 2);
         break;
 
       case 'l':
-        this.velocityX = -Math.sqrt(this.step * 2);
+        this.velocityX = -Math.sqrt(Object.step * 2);
         break;
 
       case 'u':
-        this.velocityY = -Math.sqrt(this.step * 2);
+        this.velocityY = -Math.sqrt(Object.step * 2);
         break;
 
       case 'd':
-        this.velocityY = Math.sqrt(this.step * 2);
+        this.velocityY = Math.sqrt(Object.step * 2);
         break;
     
       default:
