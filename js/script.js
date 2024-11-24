@@ -11,21 +11,27 @@ var timeleft = 59;
 var objs = [];
 
 const app = window.Telegram.WebApp;
-app.ready()
+app.expand();
+app.ready();
 app.disableVerticalSwipes();
+document.body.style.overflowY = 'hidden'
+document.body.style.marginTop = `100px`
+document.body.style.height = window.innerHeight + 100 + "px"
+document.body.style.paddingBottom = `100px`
+window.scrollTo(0, 100);
 
 body.addEventListener('touchstart', function (event) {
     event.preventDefault();
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
-}, false);
+}, { passive: false });
 
 body.addEventListener('touchend', function (event) {
     event.preventDefault();
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
-}, false);
+}, { passive: false });
 
 body.addEventListener('keypress', (event) => {
     switch (event.key) {
@@ -45,7 +51,7 @@ body.addEventListener('keypress', (event) => {
       default:
         break;
     }
-}, false);
+}, { passive: false });
 
 function handleGesture() {
     if (touchendX < touchstartX && Math.abs(touchstartY - touchendY) < 40) {
