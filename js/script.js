@@ -101,15 +101,28 @@ function generate() {
 }
 
 function update() {
+  var founded = null;
   objs.forEach(element => {
     if (element.x <= playerX && playerX <= element.x + 100 && element.y <= playerY && playerY <= element.y + 100) {
-      objs = objs.filter(item => item !== element);
-      addToScore(1);
-      generate();
-      draw();
-      console.log("Score:", score)
+      founded = element;
+    } else if (element.x <= playerX + 50 && element.y <= playerY && playerY <= element.y + 100) {
+      founded = element;
+    } else if (element.y <= playerY && playerY <= element.y + 100 && element.x <= playerX && playerX <= element.x + 100) {
+      founded = element;
+    } else if (element.y <= playerY + 50 && playerY <= element.y + 50 && element.x <= playerX && playerX <= element.x + 100) {
+      founded = element;
+    }
+    if (founded !== null) {
+      return false;
     }
   });
+  if (founded !== null) {
+    objs = objs.filter(item => item !== founded);
+    addToScore(1);
+    generate();
+    draw();
+    console.log("Score:", score)
+  }
 }
 
 
