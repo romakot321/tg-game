@@ -106,7 +106,7 @@ function update() {
   objs.forEach(element => {
     if (element.x <= playerX && playerX <= element.x + 100 && element.y <= playerY && playerY <= element.y + 100) {
       founded = element;
-    } else if (element.x <= playerX + 50 && element.y <= playerY && playerY <= element.y + 100) {
+    } else if (element.x <= playerX + 50 && element.x + 100 >= playerX && element.y <= playerY && playerY <= element.y + 100) {
       founded = element;
     } else if (element.y <= playerY && playerY <= element.y + 100 && element.x <= playerX && playerX <= element.x + 100) {
       founded = element;
