@@ -162,3 +162,4 @@ var tick = function(canvas, ctx) {
 }
 
 tick(canvas, ctx);
+timer();
