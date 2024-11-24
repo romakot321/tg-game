@@ -44,7 +44,7 @@ body {
   justify-self: center;
 }
 
-#control > a {
+#control > p {
   border: blue 1px solid;
   border-radius: 8px;
   font-family: sans-serif;
@@ -59,7 +59,7 @@ body {
   grid-column: 1/2;
 }
 
-#control > a:hover {
+#control > p:hover {
   border: darkblue 1.5px solid;
   padding: 4.5px;
 }

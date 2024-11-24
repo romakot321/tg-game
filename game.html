@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/object.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="game">
+        <canvas id="canvas">
+          <button>LEADERBOARD</button>
+        </canvas>
+      </div>
+
+      <div id="control">
+        <h2 id="score">Score: 0</h2>
+        <h2 id="timer">Time left: 00:00</h2>
+        <p onclick="toLeaderboard()" id="leaders-button" style="visibility: hidden;" href="leaderboard.html">Leaders</p>
+      </div>
+    </div> 
+    <script src="js/script.js"></script>
+  </body>
+</html>

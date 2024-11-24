@@ -6,7 +6,7 @@ var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(0, 0, "black");
-var timeleft = 5;
+var timeleft = 1;
 
 var objs = [];
 
@@ -191,6 +191,10 @@ function draw(canvas, ctx) {
   });
 
   update();
+}
+
+function toLeaderboard() {
+  location.href = "leaderboard.html";
 }
 
 resizeCtxCanvas(ctx);
