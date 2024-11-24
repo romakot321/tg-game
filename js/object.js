@@ -84,10 +84,10 @@ class Object extends Rect {
     this.y -= this.velocityY * 1.5;
 
     if (this.velocityX > 0) {
-      this.velocityX -= this.speed;
+      this.velocityX -= this.speed * 0.75;
     }
     if (this.velocityY > 0) {
-      this.velocityY -= this.speed;
+      this.velocityY -= this.speed * 0.75;
     }
     if (this.velocityX <= 0 && this.velocityY <= 0) {
       this.canBeRemoved = true;

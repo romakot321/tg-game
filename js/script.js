@@ -15,10 +15,10 @@ app.expand();
 app.ready();
 app.disableVerticalSwipes();
 document.body.style.overflowY = 'hidden'
-document.body.style.marginTop = `100px`
-document.body.style.height = window.innerHeight + 100 + "px"
-document.body.style.paddingBottom = `100px`
-window.scrollTo(0, 100);
+document.body.style.marginTop = `1px`
+document.body.style.height = window.innerHeight + 1 + "px"
+document.body.style.paddingBottom = `1px`
+window.scrollTo(0, 1);
 
 body.addEventListener('touchstart', function (event) {
     event.preventDefault();
