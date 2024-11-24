@@ -2,9 +2,11 @@
 var canvas = document.getElementById('canvas');
 var body = document.getElementsByTagName('body')[0];
 var scoreElement = document.getElementById('score');
+var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(50, 50, "black");
+var timeleft = 59;
 
 var objs = [];
 
@@ -82,6 +84,17 @@ function move(direction) {
   playerObject.move(direction);
 }
 
+function timer(){
+    var timer = setInterval(function(){
+        timerElement.innerHTML='Time left: 0'+Math.floor(timeleft/60)+":"+timeleft%60;
+        timeleft--;
+        if (timeleft < 0) {
+	    timerElement.innerHTML = "Game end";
+            clearInterval(timer);
+        }
+    }, 1000);
+}
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -100,6 +113,7 @@ function generate() {
 function update() {
   playerObject.update();
 
+  if (timeleft <= 0) { return; }
   var founded = null;
   objs.forEach(element => {
     if (element.canBeRemoved) {
@@ -121,8 +135,13 @@ function update() {
 function draw(canvas, ctx) {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  playerObject.draw(ctx);
+  if (timeleft <= 0) {
+    ctx.fillStyle = "lightblue";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    return;
+  }
 
+  playerObject.draw(ctx);
   objs.forEach(element => {
     element.update();
     element.draw(ctx);
