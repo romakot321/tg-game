@@ -6,7 +6,7 @@ var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(0, 0, "black");
-var timeleft = 60;
+var timeleft = 5;
 
 var objs = [];
 
@@ -124,10 +124,16 @@ function timer(){
     timerElement.innerHTML = 'Time left: ' + minutes + ":" + seconds;
     timeleft--;
     if (timeleft < 0) {
-      timerElement.innerHTML = "Game end";
+      finishGame();
       clearInterval(timer);
     }
   }, 1000);
+}
+
+function finishGame() {
+  timerElement.innerHTML = "Game end";
+  sendScore(getCurrentID(), score);
+  document.getElementById("leaders-button").style.visibility = "visible"; 
 }
 
 function getRandomInt(min, max) {

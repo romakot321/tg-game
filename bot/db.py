@@ -32,6 +32,14 @@ async def new_user(telegram_id: int):
             pass
 
 
+async def get_users() -> list[dict]:
+    async with connection_pool.acquire() as connection:
+        result = await connection.fetch("""
+            SELECT * FROM users
+        """)
+    return [dict(user) for user in result]
+
+
 async def get_user(telegram_id: int) -> dict | None:
     async with connection_pool.acquire() as connection:
         result = await connection.fetchrow("""

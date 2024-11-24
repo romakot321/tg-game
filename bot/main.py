@@ -5,6 +5,7 @@ from loguru import logger
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -34,11 +35,6 @@ async def on_startup(bot: Bot):
     await bot.set_chat_menu_button(
         menu_button=MenuButtonWebApp(text="Open Menu", web_app=WebAppInfo(url=f"https://eramir.ru/game"))
     )
-    await init_db()
-
-
-async def on_shutdown(bot: Bot):
-    await close_db()
 
 
 async def init_bot():
@@ -55,7 +51,6 @@ async def init_bot():
         )
 
     dispatcher.startup.register(on_startup)
-    dispatcher.shutdown.register(on_shutdown)
     
     await bot.delete_webhook()
     logger.info("Bot started")
@@ -64,13 +59,23 @@ async def init_bot():
 
 @asynccontextmanager
 async def lifespan(app):
-    await init_bot()
+    await init_db()
+    if TOKEN:
+        await init_bot()
     yield
+    await close_db()
 
 
 def main():
     app = FastAPI(lifespan=lifespan)
     app.include_router(router)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=['*'],
+        allow_headers=['*'],
+    )
     return app
     
 
