@@ -147,8 +147,8 @@ function generate() {
     getRandomInt(0, ctx.canvas.width - 100),
     getRandomInt(0, ctx.canvas.height - 100),
     "red",
-    55,
-    55
+    45,
+    45
   );
   objs.push(obj);
 }

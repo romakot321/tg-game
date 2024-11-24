@@ -1,5 +1,3 @@
-let tg = window.Telegram.WebApp;
-
 function getCurrentID() {
-  return tg.initDataUnsafe.user.id;
+  return window.Telegram.WebApp.initDataUnsafe.user.id;
 }
