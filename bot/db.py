@@ -1,6 +1,7 @@
 import asyncpg
 import asyncio
 from os import getenv
+from loguru import logger
 
 DB_HOST = getenv("DB_HOST", "localhost")
 connection_pool = None
