@@ -3,23 +3,47 @@ var canvas = document.getElementById('canvas');
 var body = document.getElementsByTagName('body')[0];
 var scoreElement = document.getElementById('score');
 var ctx = canvas.getContext('2d');
-var playerX = 50;
-var playerY = 50;
 var score = 0;
+var playerObject = new Object(50, 50, "black");
 
 var objs = [];
 
+const app = window.Telegram.WebApp;
+app.ready()
+app.disableVerticalSwipes();
+
 body.addEventListener('touchstart', function (event) {
+    event.preventDefault();
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
 }, false);
 
 body.addEventListener('touchend', function (event) {
+    event.preventDefault();
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
 }, false);
 
+body.addEventListener('keypress', (event) => {
+    switch (event.key) {
+      case "d":
+        move('r');
+        break;
+      case "a":
+        move('l');
+        break;
+      case "s":
+        move('d');
+        break;
+      case "w":
+        move('u');
+        break;
+    
+      default:
+        break;
+    }
+}, false);
 
 function handleGesture() {
     if (touchendX < touchstartX && Math.abs(touchstartY - touchendY) < 40) {
@@ -54,93 +78,68 @@ function addToScore(val) {
   scoreElement.innerText = "Score: " + score;
 }
 
-const app = window.Telegram.WebApp;
-app.ready()
-app.disableVerticalSwipes();
-
-resizeCtxCanvas(ctx);
-generate();
-generate();
-draw();
-
 function move(direction) {
-  switch (direction) {
-    case 'r':
-      playerX += 50;
-      break;
-
-    case 'l':
-      playerX -= 50;
-      break;
-
-    case 'u':
-      playerY -= 50;
-      break;
-
-    case 'd':
-      playerY += 50;
-      break;
-  
-    default:
-      break;
-  }
-  draw();
+  playerObject.move(direction);
 }
 
 function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function generate() {
-  var obj = {
-    x: getRandomInt(0, ctx.canvas.width - 100),
-    y: getRandomInt(0, ctx.canvas.height - 100)
-  }
+  var obj = new Object(
+    getRandomInt(0, ctx.canvas.width - 100),
+    getRandomInt(0, ctx.canvas.height - 100),
+    "red"
+  );
   objs.push(obj);
 }
 
 function update() {
+  playerObject.update();
+
   var founded = null;
   objs.forEach(element => {
-    if (element.x <= playerX && playerX <= element.x + 100 && element.y <= playerY && playerY <= element.y + 100) {
-      founded = element;
-    } else if (element.x <= playerX + 50 && element.x + 100 >= playerX && element.y <= playerY && playerY <= element.y + 100) {
-      founded = element;
-    } else if (element.y <= playerY && playerY <= element.y + 100 && element.x <= playerX && playerX <= element.x + 100) {
-      founded = element;
-    } else if (element.y <= playerY + 50 && playerY <= element.y + 50 && element.x <= playerX && playerX <= element.x + 100) {
-      founded = element;
+    if (element.canBeRemoved) {
+      objs = objs.filter(item => item !== element);
+      return;
     }
-    if (founded !== null) {
+    if (element.iscollide(playerObject)) {
+      founded = element;
       return false;
     }
   });
   if (founded !== null) {
-    objs = objs.filter(item => item !== founded);
     addToScore(1);
     generate();
-    draw();
-    console.log("Score:", score)
+    founded.pop();
   }
 }
 
-
-function draw() {
+function draw(canvas, ctx) {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  ctx.strokeStyle = "black";
-  ctx.beginPath();
-  ctx.rect(playerX, playerY, 50, 50);
-  ctx.stroke();
+  playerObject.draw(ctx);
 
-  ctx.strokeStyle = "red";
   objs.forEach(element => {
-    ctx.beginPath();
-    ctx.rect(element.x, element.y, 100, 100);
-    ctx.stroke();
+    element.update();
+    element.draw(ctx);
   });
 
   update();
 }
+
+resizeCtxCanvas(ctx);
+generate();
+generate();
+
+var tick = function(canvas, ctx) {
+    draw(canvas, ctx);
+    requestAnimationFrame(function() {
+        tick(canvas, ctx);
+    });
+}
+
+tick(canvas, ctx);
