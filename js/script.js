@@ -1,5 +1,6 @@
 //Define globals
 var canvas = document.getElementById('canvas');
+var body = document.getElementsByTagName('body')[0];
 var scoreElement = document.getElementById('score');
 var ctx = canvas.getContext('2d');
 var playerX = 50;
@@ -8,12 +9,12 @@ var score = 0;
 
 var objs = [];
 
-canvas.addEventListener('touchstart', function (event) {
+body.addEventListener('touchstart', function (event) {
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
 }, false);
 
-canvas.addEventListener('touchend', function (event) {
+body.addEventListener('touchend', function (event) {
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
