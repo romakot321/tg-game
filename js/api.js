@@ -1,4 +1,4 @@
-let baseUrl = "";
+let baseUrl = "http://localhost:9021";
 
 
 function sendScore(telegramId, score) {
@@ -10,11 +10,12 @@ function sendScore(telegramId, score) {
   });
 }
 
-function updateUserInfo(info) {
-  fetch(baseUrl + '/api/user/' + info.id, {
+function updateUserInfo(data) {
+  console.log(data)
+  fetch(baseUrl + '/api/user/' + data.id, {
     method: "PATCH",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(info)
+    body: JSON.stringify(data)
   });
 }
 

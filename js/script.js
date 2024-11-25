@@ -198,6 +198,7 @@ function toLeaderboard() {
 }
 
 function init() {
+  console.log(getCurrentUserInfo());
   updateUserInfo(getCurrentUserInfo());
   resizeCtxCanvas(ctx);
   generate();
@@ -214,3 +215,4 @@ var tick = function(canvas, ctx) {
     });
 }
 
+init()
