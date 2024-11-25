@@ -3,16 +3,36 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache">
     <title></title>
     <link href="css/style.css" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
-    <iframe id="screen" src="game.html" style="width: 100%; height: 90vh; border: none; min-width: 180px;">
+    <iframe id="screen" style="width: 100%; height: 90vh; border: none; min-width: 180px;">
     </iframe>
     <div id="navbar">
-      <button style="grid-column: 1;" class="nav-button" onclick="document.getElementById('screen').src = 'game.html';">Game</button>
-      <button style="grid-column: 2;" class="nav-button" onclick="document.getElementById('screen').src = 'leaderboard.html';">Leaderboard</button>
+      <button style="grid-column: 1;" id="togame" class="nav-button" onclick="toGame();">Game</button>
+      <button style="grid-column: 2;" id="toleaders" class="nav-button" onclick="toLeaders();">Leaderboard</button>
     </div>
+
+    <script>
+    var screen = document.getElementById('screen');
+
+    function toGame() {
+      if (screen.src.endsWith("game.html")) { return; }
+      screen.src = "game.html";
+      document.getElementById('toleaders').style.border = "1px solid blue";
+      document.getElementById('togame').style.border = "1.5px solid darkblue";
+    }
+    function toLeaders() {
+      if (screen.src.endsWith("leaderboard.html")) { return; }
+      screen.src = "leaderboard.html";
+      document.getElementById('togame').style.border = "1px solid blue";
+      document.getElementById('toleaders').style.border = "1.5px solid darkblue";
+    }
+
+    window.onload = () => { toGame(); }
+    </script>
   </body>
 </html>

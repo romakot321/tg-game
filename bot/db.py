@@ -14,7 +14,7 @@ async def init_tables():
         await connection.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id serial PRIMARY KEY,
-                telegram_id int unique not null,
+                telegram_id bigint unique not null,
                 score int,
                 first_name text null,
                 last_name text null,

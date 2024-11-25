@@ -5,7 +5,7 @@ var scoreElement = document.getElementById('score');
 var timerElement = document.getElementById('timer');
 var ctx = canvas.getContext('2d');
 var score = 0;
-var playerObject = new Object(0, 0, "black");
+var playerObject = new Object(100, 100, "black");
 var timeleft = 60;
 
 var objs = [];
@@ -90,22 +90,22 @@ function addToScore(val) {
 function move(direction) {
   switch (direction) {
     case 'r':
-      if (playerObject.right + Object.step >= canvas.width) {
+      if (playerObject.left + Object.step >= canvas.width) {
         return;
       }
       break;
     case 'l':
-      if (playerObject.left - Object.step <= 0) {
+      if (playerObject.right - Object.step <= 0) {
         return;
       }
       break;
     case 'd':
-      if (playerObject.bottom + Object.step >= canvas.height) {
+      if (playerObject.top + Object.step >= canvas.height) {
         return;
       }
       break;
     case 'u':
-      if (playerObject.top - Object.step <= 0) {
+      if (playerObject.bottom - Object.step <= 0) {
         return;
       }
       break;
@@ -201,7 +201,6 @@ function toLeaderboard() {
 }
 
 function init() {
-  console.log(getCurrentUserInfo());
   updateUserInfo(getCurrentUserInfo());
   resizeCtxCanvas(ctx);
   generate();

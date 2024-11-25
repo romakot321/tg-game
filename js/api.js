@@ -1,4 +1,4 @@
-let baseUrl = "";
+var baseUrl = "";
 
 
 function sendScore(telegramId, score) {
@@ -11,7 +11,7 @@ function sendScore(telegramId, score) {
 }
 
 function updateUserInfo(data) {
-  console.log(data)
+  if (data === undefined) { return; }
   fetch(baseUrl + '/api/user/' + data.id, {
     method: "PATCH",
     headers: {"Content-Type": "application/json"},
