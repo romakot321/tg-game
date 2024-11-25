@@ -37,10 +37,11 @@ body {
   background-color: lightblue;
   border: blue 1px solid;
   border-radius: 8px;
+  overflow-y: scroll;
 
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 7px;
   padding: 10px;
 }
