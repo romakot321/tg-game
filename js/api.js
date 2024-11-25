@@ -2,11 +2,19 @@ let baseUrl = "";
 
 
 function sendScore(telegramId, score) {
-  var body = {telegram_id: telegramId, score: score};
-  fetch(baseUrl + '/api/user', {
+  var body = {score: score};
+  fetch(baseUrl + '/api/user/' + telegramId, {
     method: "PATCH",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(body)
+  });
+}
+
+function updateUserInfo(info) {
+  fetch(baseUrl + '/api/user/' + info.id, {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(info)
   });
 }
 

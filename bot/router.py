@@ -21,6 +21,9 @@ async def get_users():
     return [UserSchema.model_validate(user) for user in users]
 
 
-@router.patch('')
-async def update_user(schema: UserUpdateSchema):
-    await db.add_user_score(schema.telegram_id, schema.score)
+@router.patch('/{telegram_id}')
+async def update_user(telegram_id: int, schema: UserUpdateSchema):
+    if schema.score is not None:
+        await db.add_user_score(telegram_id, schema.score)
+    schema.score = None
+    await db.update_user(telegram_id, schema.model_dump(exclude_none=True))

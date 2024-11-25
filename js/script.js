@@ -197,9 +197,15 @@ function toLeaderboard() {
   location.href = "leaderboard.html";
 }
 
-resizeCtxCanvas(ctx);
-generate();
-generate();
+function init() {
+  updateUserInfo(getCurrentUserInfo());
+  resizeCtxCanvas(ctx);
+  generate();
+  generate();
+
+  tick(canvas, ctx);
+  timer();
+}
 
 var tick = function(canvas, ctx) {
     draw(canvas, ctx);
@@ -208,5 +214,3 @@ var tick = function(canvas, ctx) {
     });
 }
 
-tick(canvas, ctx);
-timer();

@@ -13,9 +13,13 @@ async def init_tables():
     async with connection_pool.acquire() as connection:
         await connection.execute('''
             CREATE TABLE IF NOT EXISTS users (
-            id serial PRIMARY KEY,
-            telegram_id int unique,
-            score int
+                id serial PRIMARY KEY,
+                telegram_id int unique not null,
+                score int,
+                first_name text null,
+                last_name text null,
+                username text null,
+                photo_url text null
             );
         ''')
 
@@ -55,6 +59,22 @@ async def add_user_score(telegram_id: int, score: int):
         await connection.execute("""
             UPDATE users SET score=score + $1 WHERE telegram_id=$2
         """, score, telegram_id)
+
+
+async def update_user(telegram_id: int, info: dict):
+    if connection_pool is None:
+        raise ValueError("Connect to db first")
+    sql = ""
+    for key, value in info.items():
+        if value is None:
+            continue
+        sql += f"{key}={'\'' + value + '\'' if isinstance(value, str) else value}"
+    if not sql:
+        return
+    async with connection_pool.acquire() as connection:
+        await connection.execute(f"""
+            UPDATE users SET {sql} WHERE telegram_id=$1
+        """, telegram_id)
 
 
 async def _connect():
