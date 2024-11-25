@@ -38,7 +38,7 @@ async def new_user(telegram_id: int):
 
 async def get_users(order_by_score: bool = False) -> list[dict]:
     sql = "SELECT * FROM users"
-    if sort_by_score:
+    if order_by_score:
         sql += " ORDER BY score DESC"
     async with connection_pool.acquire() as connection:
         result = await connection.fetch(sql)
