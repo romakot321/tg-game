@@ -84,7 +84,7 @@ function onMessage(data) {
 function start() {
   const urlParams = new URLSearchParams(window.location.search);
   console.log(urlParams.get('enemyId'));
-  window.socket = new WebSocket("ws://127.0.0.1:9021/api/pvp/create/" + getCurrentID() + "/" + urlParams.get('enemyId'));
+  window.socket = new WebSocket("/api/pvp/create/" + getCurrentID() + "/" + urlParams.get('enemyId'));
   window.socket.addEventListener("open", (event) => {
     console.log("Connection opened")
   });
