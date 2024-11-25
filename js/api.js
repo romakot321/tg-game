@@ -1,4 +1,4 @@
-let baseUrl = "http://localhost:9021";
+let baseUrl = "";
 
 
 function sendScore(telegramId, score) {
