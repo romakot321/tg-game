@@ -38,6 +38,7 @@ class Object extends Rect {
     this.color = color;
     this.velocityX = 0;
     this.velocityY = 0;
+    this.ticksAlive = 0;
 
     this.isMoving = false;
     this.isPopping = false;
@@ -97,11 +98,16 @@ class Object extends Rect {
   }
 
   update() {
+    this.ticksAlive++;
     this.x += this.velocityX;
     this.y += this.velocityY;
 
     this.animateMove();
     this.animatePop();
+
+    if (this.color === "red" && this.ticksAlive > 500) {
+      this.canBeRemoved = true;
+    }
   }
 
   pop() {

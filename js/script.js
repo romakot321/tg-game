@@ -127,6 +127,9 @@ function timer(){
       finishGame();
       clearInterval(timer);
     }
+    if (timeleft == 30) {
+      generate();
+    }
   }, 1000);
 }
 
@@ -158,8 +161,10 @@ function update() {
   if (timeleft <= 0) { return; }
   var founded = null;
   objs.forEach(element => {
+    element.update();
     if (element.canBeRemoved) {
       objs = objs.filter(item => item !== element);
+      generate();
       return;
     }
     if (element.iscollide(playerObject)) {
@@ -169,7 +174,6 @@ function update() {
   });
   if (founded !== null) {
     addToScore(1);
-    generate();
     founded.pop();
   }
 }
