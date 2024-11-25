@@ -63,12 +63,14 @@ body {
 
 #score, #enemy-score {
   font-family: sans-serif;
+  font-size: 1.2rem;
   grid-row: 1;
   justify-self: center;
 }
 
 #timer {
   font-family: sans-serif;
+  font-size: 1.2rem;
   grid-row: 2;
   justify-self: center;
 }
@@ -105,5 +107,9 @@ body {
     min-width: 180px;
     grid-template-columns: 100%;
     grid-template-rows: calc(100% - 150px) 150px;
+  }
+
+  #timer, #score, #enemy-score {
+    font-size: 1.2rem;
   }
 }
