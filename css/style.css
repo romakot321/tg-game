@@ -61,9 +61,15 @@ body {
   justify-items: center;
 }
 
-#score, #enemy-score, #timer {
+#score, #enemy-score {
   font-family: sans-serif;
   grid-row: 1;
+  justify-self: center;
+}
+
+#timer {
+  font-family: sans-serif;
+  grid-row: 2;
   justify-self: center;
 }
 

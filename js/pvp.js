@@ -26,7 +26,7 @@ function update() {
   if (founded !== null) {
     addToScore(1);
     founded.pop();
-    let body = {event: "score", data: {value: 1}};
+    let body = {event: "score", data: {value: 1, time_left: timeleft}};
     socket.send(JSON.stringify(body));
   }
 }
@@ -63,6 +63,18 @@ function move(direction) {
   socket.send(JSON.stringify(body));
 }
 
+function finishGame() {
+  let text = "";
+  if (enemyScore > score) {
+    text = "Enemy win.";
+  } else if (score > enemyScore) {
+    text = "You win!";
+  } else {
+    text = "хопхейлалалей";
+  }
+  timerElement.innerText = text;
+}
+
 function onMessage(data) {
   data = JSON.parse(data);
   console.log(data);
@@ -78,6 +90,8 @@ function onMessage(data) {
     enemyScore += data.data.value;
     console.log(enemyScore);
     enemyScoreElement.innerText = "Enemy score: " + enemyScore;
+  } else if (data.event === "end") {
+    finishGame()
   }
 }
 

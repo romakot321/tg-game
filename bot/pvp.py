@@ -43,6 +43,7 @@ class PVPService:
             msg = PVPMessageSchema.model_validate(data)
             if msg.event == "score":
                 room.state.scores[user_id] += msg.data["value"]
+                room.state.time_left = max(float(msg.data{"time_left"}), room.state.time_left)
             for i, enemy_client in room.clients.items():
                 if i == user_id:
                     continue
@@ -79,5 +80,5 @@ class PVPService:
                     finish = True
                     break
             await client.send_json(PVPMessageSchema(event="wait", data=None).model_dump())
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(1)
         await client.send_json(PVPMessageSchema(event="start", data={"id": room_id}).model_dump())

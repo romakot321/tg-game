@@ -26,7 +26,6 @@ markup = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text='Start', web_app=WebAppInfo(url='https://eramir.ru/game')),
-            InlineKeyboardButton(text='Leaders', web_app=WebAppInfo(url='https://eramir.ru/game/leaderboard.html'))
         ]
     ]
 )
