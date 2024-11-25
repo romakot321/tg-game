@@ -73,6 +73,7 @@ function finishGame() {
     text = "хопхейлалалей";
   }
   timerElement.innerText = text;
+  timeleft = 0;
 }
 
 function onMessage(data) {

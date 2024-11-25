@@ -43,7 +43,7 @@ class PVPService:
             msg = PVPMessageSchema.model_validate(data)
             if msg.event == "score":
                 room.state.scores[user_id] += msg.data["value"]
-                room.state.time_left = max(float(msg.data{"time_left"}), room.state.time_left)
+                room.state.time_left = max(float(msg.data["time_left"]), room.state.time_left)
             for i, enemy_client in room.clients.items():
                 if i == user_id:
                     continue
