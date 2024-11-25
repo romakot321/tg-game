@@ -17,7 +17,7 @@ from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
 from db import init_db, new_user, close_db
-from router import router
+from router import router, pvp_router
 
 TOKEN = getenv("BOT_TOKEN")
 
@@ -70,6 +70,7 @@ async def lifespan(app):
 def main():
     app = FastAPI(lifespan=lifespan)
     app.include_router(router)
+    app.include_router(pvp_router)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=['*'],

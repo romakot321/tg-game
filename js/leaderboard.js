@@ -14,6 +14,11 @@ window.onload = async () => {
     const userElement = document.createElement("div");
     userElement.className = "user-card";
     userElement.innerHTML = '<img src="' + user.photo_url + '" alt="user" class="user-logo"><p class="username">' + user.first_name + " " + user.last_name + '</p><p class="score">' + user.score + 'p</p>';
+    userElement.addEventListener('click', function (userId) {
+      return () => {
+        window.parent.postMessage(['open-pvp', userId], '*');
+      }
+    }(user.telegram_id));
     usersContainer.appendChild(userElement);
   });
 }

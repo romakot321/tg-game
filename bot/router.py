@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, WebSocket
 
 import db
 from schemas import UserSchema, UserUpdateSchema
+from pvp import PVPService
 
 
 router = APIRouter(prefix='/api/user', tags=['User'])
@@ -27,3 +28,13 @@ async def update_user(telegram_id: int, schema: UserUpdateSchema):
         await db.add_user_score(telegram_id, schema.score)
     schema.score = None
     await db.update_user(telegram_id, schema.model_dump(exclude_none=True))
+
+
+pvp_router = APIRouter(prefix="/api/pvp", tags=["PVP"])
+pvp_service = PVPService()
+
+
+@pvp_router.websocket("/create/{user1_id}/{user2_id}")
+async def run_pvp(websocket: WebSocket, user1_id: int, user2_id: int):
+    await websocket.accept()
+    await pvp_service.connect(websocket, user1_id, user2_id)

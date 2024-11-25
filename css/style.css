@@ -61,7 +61,7 @@ body {
   justify-items: center;
 }
 
-#score, #timer {
+#score, #enemy-score, #timer {
   font-family: sans-serif;
   grid-row: 1;
   justify-self: center;

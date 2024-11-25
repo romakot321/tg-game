@@ -152,7 +152,7 @@ function generate() {
     45,
     45
   );
-  objs.push(obj);
+  window.objs.push(obj);
 }
 
 function update() {
@@ -160,7 +160,7 @@ function update() {
 
   if (timeleft <= 0) { return; }
   var founded = null;
-  objs.forEach(element => {
+  window.objs.forEach(element => {
     element.update();
     if (element.canBeRemoved) {
       objs = objs.filter(item => item !== element);
@@ -216,5 +216,3 @@ var tick = function(canvas, ctx) {
         tick(canvas, ctx);
     });
 }
-
-init()
