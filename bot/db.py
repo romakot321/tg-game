@@ -65,10 +65,12 @@ async def update_user(telegram_id: int, info: dict):
     if connection_pool is None:
         raise ValueError("Connect to db first")
     sql = ""
-    for key, value in info.items():
-        if value is None:
-            continue
-        sql += f"{key}={'\'' + value + '\'' if isinstance(value, str) else value}"
+    sql = ','.join(
+        f"{key}={'\'' + value + '\'' if isinstance(value, str) else value}"
+        for key, value in info.items()
+        if value is not None
+    )
+    logger.debug(sql)
     if not sql:
         return
     async with connection_pool.acquire() as connection:
