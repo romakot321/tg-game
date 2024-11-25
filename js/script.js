@@ -133,7 +133,6 @@ function timer(){
 function finishGame() {
   timerElement.innerHTML = "Game end";
   sendScore(getCurrentID(), score);
-  document.getElementById("leaders-button").style.visibility = "visible"; 
 }
 
 function getRandomInt(min, max) {
