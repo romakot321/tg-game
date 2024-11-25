@@ -17,7 +17,7 @@ async def get_user(telegram_id: int):
 
 @router.get('', response_model=list[UserSchema])
 async def get_users():
-    users = await db.get_users()
+    users = await db.get_users(order_by_score=True)
     return [UserSchema.model_validate(user) for user in users]
 
 
