@@ -8,6 +8,7 @@ var score = 0;
 var playerObject = new Object(100, 100, "black");
 var timeleft = 60;
 var prevTimestamp;
+var collectablesCount = 0;
 
 var objs = [];
 
@@ -212,6 +213,7 @@ function getRandomInt(min, max) {
 }
 
 function generate() {
+  if (collectablesCount >= 5) { return; }
   var obj = new Object(
     getRandomInt(0, ctx.canvas.width - 100) ,
     getRandomInt(0, ctx.canvas.height - 100),
@@ -224,6 +226,7 @@ function generate() {
     obj.velocityY = (-0.5 + Math.random() * 2);
     obj.velocityX = (-0.5 + Math.random() * 2);
   }
+  collectablesCount++;
   window.objs.push(obj);
 }
 
@@ -252,6 +255,7 @@ function checkObjectInterract(obj) {
   if (obj.isPopping) { return; }
   if (obj.canBeRemoved == true) {
     objs = objs.filter(item => item !== obj);
+    collectablesCount--;
     generate();
     return;
   }

@@ -7,6 +7,7 @@
   --link-color: var(--tg-theme-link-color, black);
   --button-color: var(--tg-theme-button-color, darkblue);
   --button-text-color: var(--tg-theme-button-text-color, black);
+  --accent-text-color: var(--tg-theme-accent-text-color, black);
 }
 
 body {
@@ -69,7 +70,7 @@ body {
 .header {
   grid-row: 1;
 
-  background-color: var(--secondary-background);
+  background-color: var(--section-background);
   color: var(--text-color);
   border-radius: 8px;
   height: 100%;
@@ -88,6 +89,7 @@ body {
 .score {
   grid-column: 3;
   justify-self: center;
+  color: var(--accent-text-color);
 }
 
 
