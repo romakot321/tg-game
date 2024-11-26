@@ -1,15 +1,26 @@
+* {
+  --background: var(--tg-theme-bg-color, white);
+  --secondary-background: var(--tg-theme-secondary-bg-color, lightblue);
+  --text-color: var(--tg-theme-text-color, black);
+  --hint-color: var(--tg-theme-hint-color, white);
+  --link-color: var(--tg-theme-link-color, black);
+  --button-color: var(--tg-theme-button-color, darkblue);
+  --button-text-color: var(--tg-theme-button-text-color, black);
+}
+
 body {
   box-sizing: border-box;
   height: 100vh;
   padding: 10px;
   overflow-y: hidden;
-  background-color: white;
+  background-color: var(--background);
   background-size: cover;
   background-position: center;
 }
 
 #main {
   height: 99%;
+  background-color: var(--background);
 
   display: grid;
   grid-template-rows: 10vh 1fr;
@@ -28,8 +39,7 @@ body {
   grid-row: 2;
   height: 95%;
 
-  background-color: lightblue;
-  border: blue 1px solid;
+  background-color: var(--secondary-background);
   border-radius: 8px;
   overflow-y: scroll;
 
@@ -41,9 +51,8 @@ body {
 }
 
 .user-card {
-  background-color: #aedae8;
-  border: 1px blue solid;
-  border-radius: 10px;
+  border-bottom: 1px var(--button-color) solid;
+  border-radius: 0px;
   flex: 0 0 5vh;
 
   display: grid;
@@ -57,8 +66,8 @@ body {
 .header {
   grid-row: 1;
 
-  background-color: lightblue;
-  border: blue 1px solid;
+  background-color: var(--secondary-background);
+  color: var(--text-color);
   border-radius: 8px;
   height: 100%;
   box-shadow: none;

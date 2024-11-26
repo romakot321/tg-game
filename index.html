@@ -23,14 +23,14 @@
     function toGame() {
       if (screen.src.endsWith("game.html")) { return; }
       screen.src = "game.html";
-      document.getElementById('toleaders').style.border = "1px solid blue";
-      document.getElementById('togame').style.border = "1.5px solid darkblue";
+      document.getElementById('toleaders').style.border = "1px solid var(--button-color)";
+      document.getElementById('togame').style.border = "2px solid var(--button-color)";
     }
     function toLeaders() {
       if (screen.src.endsWith("leaderboard.html")) { return; }
       screen.src = "leaderboard.html";
-      document.getElementById('togame').style.border = "1px solid blue";
-      document.getElementById('toleaders').style.border = "1.5px solid darkblue";
+      document.getElementById('togame').style.border = "1px solid var(--button-color)";
+      document.getElementById('toleaders').style.border = "2px solid var(--button-color)";
     }
     function startPVPCallback(event) {
       if (event.data[0] == "open-pvp") {
