@@ -71,14 +71,19 @@ class PVPService:
             room.state.scores[user_id] += msg.data["value"]
             room.state.time_left = max(float(msg.data["time_left"]), room.state.time_left)
         elif msg.event == "remove":
+            founded = False
             for obj in room.state.objects:
                 if (obj.x, obj.y) == (msg.data['x'], msg.data['y']):
                     room.state.objects.remove(obj)
+                    founded = True
                     break
-            room.state.objects.append(self._generate_object(room))
-            logger.debug((room.state.objects, msg))
-            msg = PVPMessageSchema(event="objects", data={'objects': room.state.objects})
-            await self._send(room, user_id, msg)
+            if founded:
+                room.state.objects.append(self._generate_object(room))
+                logger.debug((room.state.objects, msg))
+                msg = PVPMessageSchema(event="objects", data={'objects': room.state.objects})
+                await self._send(room, user_id, msg)
+            else:
+                return
         elif msg.event == "init":
             room.clients[user_id].screen_width = msg.data["screen_width"]
             room.clients[user_id].screen_height = msg.data["screen_height"]
