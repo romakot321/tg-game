@@ -212,7 +212,6 @@ function getRandomInt(min, max) {
 }
 
 function generate() {
-  if (objs.length >= 5) { return; }
   var obj = new Object(
     getRandomInt(0, ctx.canvas.width - 100) ,
     getRandomInt(0, ctx.canvas.height - 100),
@@ -258,7 +257,7 @@ function checkObjectInterract(obj) {
   }
   if (obj.color == Object.obstacleSlowerColor) {
     if (obj.iscollide(playerObject)) {
-      playerObject.slowness = 3;
+      playerObject.slowness = 2;
     }
   }
   if (obj.slowness != 1) {
