@@ -135,16 +135,16 @@ class Object extends Rect {
     this.x += this.velocityX;
     this.y += this.velocityY;
 
-    if (this.left > window.canvas.widht || this.right < 0 || this.bottom < 0 || this.top > window.canvas.height) {
-      this.canBeRemoved = true;
-      return;
-    }
 
     this.animateMove(delta);
     this.animatePop(delta);
 
-    if (this.color === "red" && this.ticksAlive > Object.ticksToLive) {
-      this.canBeRemoved = true;
+    if (this.color === "red") {
+      if (this.left > window.canvas.widht || this.right < 0 || this.bottom < 0 || this.top > window.canvas.height) {
+        this.canBeRemoved = true;
+      } else if (this.ticksAlive > Object.ticksToLive) {
+        this.canBeRemoved = true;
+      }
     }
   }
 
