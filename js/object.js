@@ -38,6 +38,10 @@ class Rect {
 class Object extends Rect {
   static step = 50;
   static speed = 1;
+  static obstacleSlowerColor = "#c0f6f8";
+  static playerColor = "black";
+  static enemyColor = "green";
+  static ticksToLive = 500;
 
   constructor(x, y, color, width, height, geometry) {
     super(x, y, width ?? Object.step, height ?? Object.step);
@@ -49,6 +53,7 @@ class Object extends Rect {
     if (geometry === "circle") {
       this.radius = Math.sqrt(this.width * this.width + this.height * this.height) / 3;
     }
+    this.slowness = 1; // step = step / slowness
 
     this.isMoving = false;
     this.isPopping = false;
@@ -56,7 +61,7 @@ class Object extends Rect {
   }
 
   get issolid() {
-    return (this.geometry === "rect" || this.geometry === "fillrect") && this.color !== "green";
+    return this.geometry === "rect" && this.color !== "green";
   }
 
   iscollide(rect2) {
@@ -138,7 +143,7 @@ class Object extends Rect {
     this.animateMove(delta);
     this.animatePop(delta);
 
-    if (this.color === "red" && this.ticksAlive > 500) {
+    if (this.color === "red" && this.ticksAlive > Object.ticksToLive) {
       this.canBeRemoved = true;
     }
   }
@@ -156,23 +161,27 @@ class Object extends Rect {
 
     switch (direction) {
       case 'r':
-        this.velocityX = Math.sqrt(step * 2);
+        this.velocityX = Math.sqrt(step / this.slowness * 2);
         break;
 
       case 'l':
-        this.velocityX = -Math.sqrt(step * 2);
+        this.velocityX = -Math.sqrt(step / this.slowness * 2);
         break;
 
       case 'u':
-        this.velocityY = -Math.sqrt(step * 2);
+        this.velocityY = -Math.sqrt(step / this.slowness * 2);
         break;
 
       case 'd':
-        this.velocityY = Math.sqrt(step * 2);
+        this.velocityY = Math.sqrt(step / this.slowness * 2);
         break;
     
       default:
         break;
     }
+  }
+
+  setSlowness(value) {
+    this.slowness = value;
   }
 }

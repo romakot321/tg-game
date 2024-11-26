@@ -88,10 +88,13 @@ function addToScore(val) {
   scoreElement.innerText = "Score: " + score;
 }
 
-function rectObjsCollide(rect, solid=false) {
+function rectObjsCollide(rect, solid=false, colorFilter=null) {
   for (let index = 0; index < objs.length; index++) {
     const element = objs[index];
     if (solid && !element.issolid) {
+      continue;
+    }
+    if (colorFilter !== null && element.color != colorFilter) {
       continue;
     }
     if (element.iscollide(rect)) {
@@ -233,7 +236,7 @@ function generateObstacle() {
     var obj = new Object(
       x - x % Object.step,
       y - y % Object.step,
-      "#a0a0a0",
+      "#c0f6f8",
       Object.step - 5,
       Object.step - 5,
       "fillrect"
@@ -245,32 +248,47 @@ function generateObstacle() {
   window.objs.push(obj);
 }
 
+function checkObjectInterract(obj) {
+  if (obj.isPopping) { return; }
+  if (obj.canBeRemoved == true) {
+    objs = objs.filter(item => item !== obj);
+    generate();
+    return;
+  }
+  if (obj.color == Object.obstacleSlowerColor) {
+    if (obj.iscollide(playerObject)) {
+      playerObject.slowness = 5;
+    }
+  }
+  if (obj.slowness != 1) {
+    if (rectObjsCollide(obj, false, Object.obstacleSlowerColor) == null) {
+      obj.slowness = 1;
+    }
+  }
+  checkObjectCollect(obj);
+}
+
+function checkObjectCollect(obj) {
+  if (obj.color == Object.playerColor) { return; }
+  if (obj.distanceto(playerObject) <= obj.radius * 2) {
+    addToScore(1);
+    obj.pop();
+  }
+}
+
 function update() {
   if (prevTimestamp === undefined) {
     prevTimestamp = performance.now()
   }
   let delta = 1 - (performance.now() - prevTimestamp) / 1000;
+  checkObjectInterract(playerObject);
   playerObject.update(delta);
 
   if (timeleft <= 0) { return; }
-  var founded = null;
   window.objs.forEach(element => {
     element.update(delta);
-    if (element.isPopping) { return; }
-    if (element.canBeRemoved) {
-      objs = objs.filter(item => item !== element);
-      generate();
-      return;
-    }
-    if (element.distanceto(playerObject) <= element.radius * 2) {
-      founded = element;
-      return false;
-    }
+    checkObjectInterract(element);
   });
-  if (founded !== null) {
-    addToScore(1);
-    founded.pop();
-  }
   prevTimestamp = performance.now();
 }
 
@@ -283,10 +301,10 @@ function draw(canvas, ctx) {
     return;
   }
 
-  playerObject.draw(ctx);
   objs.forEach(element => {
     element.draw(ctx);
   });
+  playerObject.draw(ctx);
 
   update();
 }
@@ -295,11 +313,13 @@ function toLeaderboard() {
   location.href = "leaderboard.html";
 }
 
-function init() {
+function init(generateObjects=true) {
   updateUserInfo(getCurrentUserInfo());
   resizeCtxCanvas(ctx);
-  generate();
-  generate();
+  if (generateObjects) {
+    generate();
+    generate();
+  }
 
   tick(canvas, ctx);
   timer();

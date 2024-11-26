@@ -27,9 +27,15 @@ class PVPCreateSchema(BaseModel):
                 or self.user2_telegram_id == other.user1_telegram_id and self.user1_telegram_id == other.user2_telegram_id
 
 
+class PVPObjectSchema(BaseModel):
+    x: int
+    y: int
+    type: str
+
+
 class PVPStateSchema(BaseModel):
     scores: dict[int, int]
-    objects: list[list]
+    objects: list[PVPObjectSchema]
     time_left: float
 
 
