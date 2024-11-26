@@ -15,14 +15,14 @@ body {
   height: 100vh;
   padding: 10px;
   overflow-y: hidden;
-  background-color: var(--background);
+  background-color: var(--secondary-background);
   background-size: cover;
   background-position: center;
 }
 
 #main {
   height: 99%;
-  background-color: var(--background);
+  background-color: var(--secondary-background);
 
   display: grid;
   grid-template-rows: 10vh 1fr;
@@ -41,7 +41,7 @@ body {
   grid-row: 2;
   height: 95%;
 
-  background-color: var(--secondary-background);
+  background-color: var(--background);
   border-radius: 8px;
   overflow-y: scroll;
 

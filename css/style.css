@@ -1,6 +1,6 @@
 * {
-  --background: var(--tg-theme-bg-color, white);
-  --secondary-background: var(--tg-theme-secondary-bg-color, lightblue);
+  --secondary-background: var(--tg-theme-bg-color, white);
+  --background: var(--tg-theme-secondary-bg-color, lightblue);
   --text-color: var(--tg-theme-text-color, black);
   --hint-color: var(--tg-theme-hint-color, white);
   --link-color: var(--tg-theme-link-color, black);
@@ -14,7 +14,7 @@ body {
   height: 100%;
   padding: 10px;
   overflow-y: hidden;
-  background-color: var(--background);
+  background-color: var(--secondary-background);
   background-size: cover;
   background-position: center;
 }
@@ -24,12 +24,12 @@ body {
   border-radius: 8px;
   border: 1px solid var(--button-color);
   color: var(--button-text-color);
-  background-color: var(--secondary-background);
+  background-color: var(--background);
 }
 
 #navbar {
   height: 100%;
-  background-color: var(--secondary-background);
+  background-color: var(--background);
   color: var(--text-color);
   border-radius: 8px;
   margin: 0px 17px;
@@ -62,7 +62,7 @@ body {
 }
 
 #control {
-  background-color: var(--secondary-background);
+  background-color: var(--background);
   color: var(--text-color);
   padding: 10px;
 
