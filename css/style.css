@@ -6,6 +6,7 @@
   --link-color: var(--tg-theme-link-color, black);
   --button-color: var(--tg-theme-button-color, darkblue);
   --button-text-color: var(--tg-theme-button-text-color, black);
+  --accent-text-color: var(--tg-theme-accent-text-color, black);
 }
 
 body {
@@ -76,6 +77,7 @@ body {
   font-size: 1.2rem;
   grid-row: 1;
   justify-self: center;
+  color: var(--accent-text-color);
 }
 
 #timer {
@@ -83,6 +85,7 @@ body {
   font-size: 1.2rem;
   grid-row: 2;
   justify-self: center;
+  color: var(--accent-text-color);
 }
 
 #control > p {

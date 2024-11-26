@@ -1,6 +1,7 @@
 * {
   --background: var(--tg-theme-bg-color, white);
   --secondary-background: var(--tg-theme-secondary-bg-color, lightblue);
+  --section-background: var(--tg-theme-section-bg-color, lightblue);
   --text-color: var(--tg-theme-text-color, black);
   --hint-color: var(--tg-theme-hint-color, white);
   --link-color: var(--tg-theme-link-color, black);
@@ -51,8 +52,10 @@ body {
 }
 
 .user-card {
+  background-color: var(--section-background);
   border-bottom: 1px var(--button-color) solid;
   border-radius: 0px;
+  color: var(--text-color);
   flex: 0 0 5vh;
 
   display: grid;
