@@ -6,59 +6,47 @@ var enemyObject = new Object(100, 100, "green");
 
 function update() {
   if (socket === undefined) { return; }
-  playerObject.update();
-
   if (timeleft <= 0) { return; }
+  if (prevTimestamp === undefined) {
+    prevTimestamp = performance.now()
+  }
+  let delta = 1 - (performance.now() - prevTimestamp) / 1000;
+  playerObject.update(delta);
+
   var founded = null;
   window.objs.forEach(element => {
+    element.update(delta);
+    if (element.isPopping) { return; }
     if (element.color !== "red" && element.color !== "#eee") { return; }
-    element.update();
     if (element.canBeRemoved) {
       window.objs = window.objs.filter(item => item !== element);
       generate();
       return;
     }
-    if (element.iscollide(playerObject)) {
+    if (element.distanceto(playerObject) <= element.radius * 2) {
       founded = element;
       return false;
     }
   });
+
   if (founded !== null) {
     addToScore(1);
     founded.pop();
-    let body = {event: "score", data: {value: 1, time_left: timeleft}};
+    let body = {event: "score", data: {value: 1, time_left: timeleft, x: founded.x, y: founded.y}};
     socket.send(JSON.stringify(body));
   }
+  prevTimestamp = performance.now();
 }
 
 function move(direction) {
   if (socket === undefined) { return; }
-  switch (direction) {
-    case 'r':
-      if (playerObject.left + Object.step >= canvas.width) {
-        return;
-      }
-      break;
-    case 'l':
-      if (playerObject.right - Object.step <= 0) {
-        return;
-      }
-      break;
-    case 'd':
-      if (playerObject.top + Object.step >= canvas.height) {
-        return;
-      }
-      break;
-    case 'u':
-      if (playerObject.bottom - Object.step <= 0) {
-        return;
-      }
-      break;
-  
-    default:
-      break;
+  let status = canMove(direction);
+  if (status === false) { return; }
+  if (status === null) {
+    playerObject.move(direction);
+  } else {
+    playerObject.move(direction, Math.abs(status));
   }
-  playerObject.move(direction);
   let body = {event: "move", data: {direction: direction}};
   socket.send(JSON.stringify(body));
 }
@@ -81,9 +69,7 @@ function onMessage(data) {
   console.log(data);
   if (data.event === "start") {
     window.objs.push(window.enemyObject);
-    console.log(window.objs);
     init();
-    console.log(window.objs);
   } else if (data.event === "move") {
     enemyObject.move(data.data.direction);
     draw(window.canvas, window.ctx);
@@ -99,9 +85,9 @@ function onMessage(data) {
 function start() {
   const urlParams = new URLSearchParams(window.location.search);
   console.log(urlParams.get('enemyId'));
-  window.socket = new WebSocket("/api/pvp/create/" + getCurrentID() + "/" + urlParams.get('enemyId'));
+  window.socket = new WebSocket(window.baseUrl + "/api/pvp/create/" + getCurrentID() + "/" + urlParams.get('enemyId'));
   window.socket.addEventListener("open", (event) => {
-    console.log("Connection opened")
+    socket.send(JSON.stringify({event: "init", data: {"screen_width": window.canvas.width, "screen_height": window.canvas.height}}))
   });
 
   window.socket.addEventListener("message", (event) => {

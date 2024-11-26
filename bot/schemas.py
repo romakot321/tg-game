@@ -29,6 +29,7 @@ class PVPCreateSchema(BaseModel):
 
 class PVPStateSchema(BaseModel):
     scores: dict[int, int]
+    objects: list[list]
     time_left: float
 
 

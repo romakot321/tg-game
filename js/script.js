@@ -7,6 +7,7 @@ var ctx = canvas.getContext('2d');
 var score = 0;
 var playerObject = new Object(100, 100, "black");
 var timeleft = 60;
+var prevTimestamp;
 
 var objs = [];
 
@@ -87,33 +88,93 @@ function addToScore(val) {
   scoreElement.innerText = "Score: " + score;
 }
 
-function move(direction) {
+function rectObjsCollide(rect, solid=false) {
+  for (let index = 0; index < objs.length; index++) {
+    const element = objs[index];
+    if (solid && !element.issolid) {
+      continue;
+    }
+    if (element.iscollide(rect)) {
+      return element;
+    }
+  }
+  return null;
+}
+
+function canMove(direction) {
   switch (direction) {
     case 'r':
       if (playerObject.left + Object.step >= canvas.width) {
-        return;
+        return false;
+      } else {
+        let rect = new Rect(playerObject.x + Object.step, playerObject.y, playerObject.width, playerObject.height)
+        let collideRect = rectObjsCollide(rect, true);
+        if (collideRect !== null) {
+          if (collideRect.iscollide(playerObject)) {
+            return false;
+          }
+          return collideRect.left - playerObject.right;
+        }
       }
       break;
     case 'l':
       if (playerObject.right - Object.step <= 0) {
-        return;
+        return false;
+      } else {
+        let rect = new Rect(playerObject.x - Object.step, playerObject.y, playerObject.width, playerObject.height)
+        let collideRect = rectObjsCollide(rect, true);
+        if (collideRect !== null) {
+          if (collideRect.iscollide(playerObject)) {
+            return false;
+          }
+          return playerObject.left - collideRect.right;
+        }
       }
       break;
     case 'd':
       if (playerObject.top + Object.step >= canvas.height) {
-        return;
+        return false;
+      } else {
+        let rect = new Rect(playerObject.x, playerObject.y + Object.step, playerObject.width, playerObject.height)
+        let collideRect = rectObjsCollide(rect, true);
+        if (collideRect !== null) {
+          if (collideRect.iscollide(playerObject)) {
+            return false;
+          }
+          return collideRect.top - playerObject.bottom;
+        }
       }
       break;
     case 'u':
       if (playerObject.bottom - Object.step <= 0) {
-        return;
+        return false;
+      } else {
+        let rect = new Rect(playerObject.x, playerObject.y - Object.step, playerObject.width, playerObject.height)
+        let collideRect = rectObjsCollide(rect, true);
+        if (collideRect !== null) {
+          if (collideRect.iscollide(playerObject)) {
+            return false;
+          }
+          return playerObject.top - collideRect.bottom;
+        }
       }
       break;
   
     default:
+      return false;
       break;
   }
-  playerObject.move(direction);
+  return null;
+}
+
+function move(direction) {
+  let status = canMove(direction);
+  if (status === false) { return; }
+  if (status === null) {
+    return playerObject.move(direction);
+  }
+  console.log(status);
+  return playerObject.move(direction, Math.abs(status));
 }
 
 function timer(){
@@ -129,6 +190,9 @@ function timer(){
     }
     if (timeleft == 30) {
       generate();
+    }
+    if (timeleft <= 45 && timeleft % 5 == 0) {
+      generateObstacle();
     }
   }, 1000);
 }
@@ -146,28 +210,59 @@ function getRandomInt(min, max) {
 
 function generate() {
   var obj = new Object(
-    getRandomInt(0, ctx.canvas.width - 100),
+    getRandomInt(0, ctx.canvas.width - 100) ,
     getRandomInt(0, ctx.canvas.height - 100),
     "red",
-    45,
-    45
+    Object.step - 5,
+    Object.step - 5,
+    "circle"
   );
+  if (timeleft < 20) {
+    obj.velocityY = (-0.5 + Math.random() * 2);
+    obj.velocityX = (-0.5 + Math.random() * 2);
+  }
+  window.objs.push(obj);
+}
+
+function generateObstacle() {
+  console.log("genobs", timeleft)
+  let attempts = 5;
+  while (true) {
+    let x = getRandomInt(0, ctx.canvas.width - Object.step);
+    let y = getRandomInt(0, ctx.canvas.height - Object.step);
+    var obj = new Object(
+      x - x % Object.step,
+      y - y % Object.step,
+      "#a0a0a0",
+      Object.step - 5,
+      Object.step - 5,
+      "fillrect"
+    );
+    if (!obj.iscollide(playerObject)) { break; }
+    attempts--;
+    if (attempts == 0) { return; }
+  }
   window.objs.push(obj);
 }
 
 function update() {
-  playerObject.update();
+  if (prevTimestamp === undefined) {
+    prevTimestamp = performance.now()
+  }
+  let delta = 1 - (performance.now() - prevTimestamp) / 1000;
+  playerObject.update(delta);
 
   if (timeleft <= 0) { return; }
   var founded = null;
   window.objs.forEach(element => {
-    element.update();
+    element.update(delta);
+    if (element.isPopping) { return; }
     if (element.canBeRemoved) {
       objs = objs.filter(item => item !== element);
       generate();
       return;
     }
-    if (element.iscollide(playerObject)) {
+    if (element.distanceto(playerObject) <= element.radius * 2) {
       founded = element;
       return false;
     }
@@ -176,6 +271,7 @@ function update() {
     addToScore(1);
     founded.pop();
   }
+  prevTimestamp = performance.now();
 }
 
 function draw(canvas, ctx) {
@@ -189,7 +285,6 @@ function draw(canvas, ctx) {
 
   playerObject.draw(ctx);
   objs.forEach(element => {
-    element.update();
     element.draw(ctx);
   });
 
