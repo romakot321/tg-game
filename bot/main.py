@@ -28,6 +28,9 @@ markup = InlineKeyboardMarkup(
             InlineKeyboardButton(text='Start', web_app=WebAppInfo(url='https://eramir.ru/game')),
         ],
         [
+            InlineKeyboardButton(text='Chips', web_app=WebAppInfo(url='https://chips.eramir.ru')),
+        ],
+        [
             InlineKeyboardButton(text='Walker', web_app=WebAppInfo(url='https://walker.eramir.ru')),
         ]
     ]
